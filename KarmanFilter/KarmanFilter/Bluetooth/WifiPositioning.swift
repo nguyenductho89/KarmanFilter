@@ -20,7 +20,7 @@ class IndoorPositioningWithWiFi: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let currentLocation = locations.last {
             // Access WiFi signal strength data and estimate indoor position here
-           // print("Estimated indoor position using WiFi: \(currentLocation.coordinate)")
+            print("Estimated indoor position using WiFi: \(currentLocation.coordinate) \(currentLocation)")
         }
     }
 }

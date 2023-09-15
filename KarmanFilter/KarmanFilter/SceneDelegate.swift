@@ -11,9 +11,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     // Create an instance of the IndoorPositioningWithWiFi class to start WiFi-based positioning
-    let wifiPositioning = IndoorPositioningWithWiFi()
-    // Create an instance of the IndoorPositioningWithBluetooth class to start Bluetooth scanning
-    let bluetoothPositioning = IndoorPositioningWithBluetooth()
+//    let wifiPositioning = IndoorPositioningWithWiFi()
+//    // Create an instance of the IndoorPositioningWithBluetooth class to start Bluetooth scanning
+    //let bluetoothPositioning = IndoorPositioningWithBluetooth()
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.

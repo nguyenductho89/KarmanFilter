@@ -6,7 +6,7 @@
 //
 
 import CoreBluetooth
-
+import os
 class IndoorPositioningWithBluetooth: NSObject, CBCentralManagerDelegate {
     var centralManager: CBCentralManager!
     
@@ -39,18 +39,31 @@ class IndoorPositioningWithBluetooth: NSObject, CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,
                         advertisementData: [String: Any], rssi RSSI: NSNumber) {
         let peripheralDescription = peripheral.description
-        
+        var distance = ""
         // Extract the transmitted power (txPower) from advertisementData
         if let txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? NSNumber {
             let txPower = txPowerLevel.intValue
             
             // Calculate the distance using the RSSI and extracted txPower
-            let distance = estimateDistanceFromRSSI(RSSI: RSSI.intValue, txPower: txPower)
+            let distanceVal = estimateDistanceFromRSSI(RSSI: RSSI.intValue, txPower: txPower)
+            distance = "\(distanceVal)"
+        } 
+//        else {
+//            let txPower = -59
+//            
+//            let distanceVal = estimateDistanceFromRSSI(RSSI: RSSI.intValue, txPower: txPower)
+//            distance = "\(distanceVal)"
+//        }
+        if !(peripheral.name ?? "").isEmpty {
             
-            print("Discovered peripheral: \(peripheralDescription) RSSI= \( RSSI.intValue) => \(distance) m")
+            
+            
+            os_log("Name Discovered peripheral: peripheralDescription=%@ RSSI=%d distance=%@", log: .default, type: .error, peripheralDescription, RSSI.intValue, distance)
+
         } else {
-            print("Discovered peripheral: \(peripheralDescription) RSSI= \( RSSI.intValue)")
+            os_log("Discovered peripheral: peripheralDescription=%@ RSSI=%d distance=%@", log: .default, type: .error, peripheralDescription, RSSI.intValue, distance)
         }
+        
     }
 
 }
