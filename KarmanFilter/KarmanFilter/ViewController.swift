@@ -451,12 +451,15 @@ public struct KalmanFilter<Type: KalmanInput>: KalmanFilterType {
 }
 
 import CoreLocation
+import DGCharts
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     let locationManager = CLLocationManager()
   //  let measurements = [0.39, 0.50, 0.48, 0.29, -1.0, 0.25, 0.32, 0.34, 0.48, 0.41, -1.0, 0.45, 0.46, 0.59, 0.42]
     var measurements: [Double] = []
-
+    var lineChartView: LineChartView!
+    var entries: [ChartDataEntry] = []
+    var entries2: [ChartDataEntry] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         locationManager.delegate = self
@@ -464,18 +467,88 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startRangingBeacons(satisfying: CLBeaconIdentityConstraint(uuid: UUID(uuidString: "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6")!))
         let timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updateRSSIValues), userInfo: nil, repeats: true)
         timer.fire() // Fire the timer immediately to perform the first update
+        // Create and configure the LineChartView
+               lineChartView = LineChartView()
+               lineChartView.translatesAutoresizingMaskIntoConstraints = false
+
+               // Add the LineChartView as a subview
+               view.addSubview(lineChartView)
+
+               // Configure constraints for the LineChartView
+               NSLayoutConstraint.activate([
+                   lineChartView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+                   lineChartView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                   lineChartView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                   lineChartView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+               ])
+
+               // Call the function to set up the line chart
+               setupLineChart()
+       // timer2 = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(addDataPoint), userInfo: nil, repeats: true)
+
+    }
+    var timer2: Timer?
+
+    func setupLineChart() {
+        // Create an array of data entries
     }
     
+    @objc func addDataPoint() {
+           // Create a data set from the updated data entries
+           let dataSet = LineChartDataSet(entries: entries, label: "Xiaomi")
+        let dataSet2 = LineChartDataSet(entries: entries2, label: "T20")
+
+           // Customize the appearance of the data set
+           dataSet.colors = [NSUIColor.blue]
+           dataSet.circleColors = [NSUIColor.blue]
+        
+        dataSet2.colors = [NSUIColor.red]
+        dataSet2.circleColors = [NSUIColor.red]
+
+           // Create a data object from the updated data set
+           let data = LineChartData(dataSets: [dataSet, dataSet2])
+
+           // Set the updated data to the line chart view
+           lineChartView.data = data
+
+           // Notify the chart that the data has changed
+           lineChartView.notifyDataSetChanged()
+       }
+    
+    @objc func addDataPointReal() {
+           // Create a data set from the updated data entries
+           let dataSet = LineChartDataSet(entries: entries2, label: "REal")
+
+           // Customize the appearance of the data set
+           dataSet.colors = [NSUIColor.red]
+           dataSet.circleColors = [NSUIColor.red]
+
+           // Create a data object from the updated data set
+           let data = LineChartData(dataSet: dataSet)
+
+           // Set the updated data to the line chart view
+           lineChartView.data = data
+
+           // Notify the chart that the data has changed
+           lineChartView.notifyDataSetChanged()
+       }
+    
     func measure() {
-        var filter = KalmanFilter(stateEstimatePrior: 0.0, errorCovariancePrior: 1)
+        var filter = KalmanFilter(stateEstimatePrior: 0, errorCovariancePrior: 1)
         
         for measurement in measurements {
-            let prediction = filter.predict(stateTransitionModel: 1, controlInputModel: 0, controlVector: 0, covarianceOfProcessNoise: 0)
+            let prediction = filter.predict(stateTransitionModel: 1, controlInputModel: 0, controlVector: 0, covarianceOfProcessNoise: 0.1)
             let update = prediction.update(measurement: measurement, observationModel: 1, covarienceOfObservationNoise: 0.1)
             
             filter = update
-            print("f \(filter) update=\(update)")
+            
         }
+        print("f update=\(filter.stateEstimatePrior) err0r=\(filter.errorCovariancePrior)")
+        guard filter.errorCovariancePrior > 0 else {
+            return
+        }
+        entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: filter.stateEstimatePrior))
+        addDataPoint()
     }
 
     @objc func updateRSSIValues(_ timer: Timer) {
@@ -484,11 +557,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var _beacons: [CLBeacon] = []
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         _beacons = beacons
-        for beacon in beacons {
-            measurements.append(Double(beacon.rssi))
-            print("f real=\(beacon.rssi)")
+        
+            for (index, beacon) in beacons.enumerated() {
+           // measurements.append(Double(beacon.rssi))
+            //print("f real=\(beacon.rssi) err0r=\(beacon.accuracy)")
+            guard beacon.accuracy > 0 else {
+                return
+            }
+                if beacon.major == 199 {
+                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
+                addDataPoint()
+            } else {
+                entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
+                addDataPoint()
+            }
+            
         }
-        measurements = Array(measurements.suffix(5))
-        measure()
+//        measurements = Array(measurements.suffix(5))
+//        measure()
     }
 }
+

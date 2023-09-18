@@ -21,6 +21,7 @@
 		D00A3FCB2AB117010045768B /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00A3FC92AB117010045768B /* BluetoothManager.swift */; };
 		D00A3FCD2AB119D20045768B /* WifiPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00A3FCC2AB119D20045768B /* WifiPositioning.swift */; };
 		D00A3FCE2AB119D20045768B /* WifiPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00A3FCC2AB119D20045768B /* WifiPositioning.swift */; };
+		D0B7836A2AB4B82C000891E5 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = D0B783692AB4B82C000891E5 /* DGCharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B7836A2AB4B82C000891E5 /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +164,9 @@
 			dependencies = (
 			);
 			name = KarmanFilter;
+			packageProductDependencies = (
+				D0B783692AB4B82C000891E5 /* DGCharts */,
+			);
 			productName = KarmanFilter;
 			productReference = D00A3F922AB115970045768B /* KarmanFilter.app */;
 			productType = "com.apple.product-type.application";
@@ -234,6 +239,9 @@
 				Base,
 			);
 			mainGroup = D00A3F892AB115970045768B;
+			packageReferences = (
+				D0B783682AB4B82C000891E5 /* XCRemoteSwiftPackageReference "Charts" */,
+			);
 			productRefGroup = D00A3F932AB115970045768B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -462,7 +470,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46W25C8KDG;
+				DEVELOPMENT_TEAM = J3Q6NXR57K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = KarmanFilter/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "bluetooth usage";
@@ -495,7 +503,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46W25C8KDG;
+				DEVELOPMENT_TEAM = J3Q6NXR57K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = KarmanFilter/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "bluetooth usage";
@@ -636,6 +644,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D0B783682AB4B82C000891E5 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D0B783692AB4B82C000891E5 /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0B783682AB4B82C000891E5 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		D00A3F9E2AB115970045768B /* KarmanFilter.xcdatamodeld */ = {
