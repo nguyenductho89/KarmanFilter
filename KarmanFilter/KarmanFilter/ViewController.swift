@@ -460,8 +460,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var lineChartView: LineChartView!
     var entries: [ChartDataEntry] = []
     var entries2: [ChartDataEntry] = []
+    let positionLbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 400)))
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.addSubview(positionLbl)
+        positionLbl.backgroundColor = .systemGreen
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startRangingBeacons(satisfying: CLBeaconIdentityConstraint(uuid: UUID(uuidString: "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6")!))
@@ -484,7 +487,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
                // Call the function to set up the line chart
                setupLineChart()
-       // timer2 = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(addDataPoint), userInfo: nil, repeats: true)
+        timer2 = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updatePosition), userInfo: nil, repeats: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
             self.isStartMeasure = true
         })
@@ -592,6 +595,27 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
 //        measurements = Array(measurements.suffix(5))
 //        measure()
+        
+    }
+    
+    @objc func updatePosition() {
+        isStartMeasure = false
+        let queryCounts = binRSSIValues(
+            beacon1RSSI: beacon1.shuffled(),
+            beacon2RSSI: beacon2.shuffled(),
+            beacon3RSSI: beacon1.shuffled()
+        )
+
+        if let estimatedLocation = estimateLocationFromBins(beaconCounts: queryCounts) {
+            print("Estimated Location: \(estimatedLocation)")
+            positionLbl.text = estimatedLocation
+        } else {
+            positionLbl.text = "fail"
+            print("Location estimation failed.")
+        }
+        beacon1.removeAll()
+        beacon2.removeAll()
+        isStartMeasure = true
     }
 }
 
