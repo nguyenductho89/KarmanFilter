@@ -32,7 +32,7 @@ let signalStrengthBins: [RSSIBin] = {
     var signalStrengthBins: [RSSIBin] = []
     var minRSSI = -100.0
     while minRSSI < -40.0 {
-        let maxRSSI = minRSSI + 5.0
+        let maxRSSI = minRSSI + 2.0
         let binName = "\(Int(minRSSI)) to \(Int(maxRSSI))"
         signalStrengthBins.append(RSSIBin(name: binName, min: minRSSI, max: maxRSSI))
         minRSSI = maxRSSI

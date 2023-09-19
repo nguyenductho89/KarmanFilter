@@ -18,7 +18,7 @@ final class KarmanFilterTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
+    func testRoomB() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         // Any test you write for XCTest can be annotated as throws and async.
@@ -28,9 +28,32 @@ final class KarmanFilterTests: XCTestCase {
         // Example usage: Estimate location based on bin counts of three beacons
         // Example usage: Estimate location based on bin counts of three beacons
         let queryCounts = binRSSIValues(
-            beacon1RSSI: [-83.0, -76.0, -77.0],
-            beacon2RSSI: [-80.0, -81.0, -81.0, -81.0, -82.0],
-            beacon3RSSI: [-83.0, -76.0, -77.0]
+            beacon1RSSI: [-83.0, -76.0, -77.0].shuffled(),
+            beacon2RSSI: [-80.0, -81.0, -81.0].shuffled(),
+            beacon3RSSI: [-83.0, -76.0, -77.0].shuffled()
+        )
+
+        if let estimatedLocation = estimateLocationFromBins(beaconCounts: queryCounts) {
+            print("Estimated Location: \(estimatedLocation)")
+        } else {
+            print("Location estimation failed.")
+        }
+
+    }
+    
+    func testRoomA() throws {
+        // This is an example of a functional test case.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Any test you write for XCTest can be annotated as throws and async.
+        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
+        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+        // Example usage: Estimate location based on bin counts of three beacons
+        // Example usage: Estimate location based on bin counts of three beacons
+        // Example usage: Estimate location based on bin counts of three beacons
+        let queryCounts = binRSSIValues(
+            beacon1RSSI: [-65.0, -60.0, -61.0, -65.0, -60.0].shuffled(),
+            beacon2RSSI: [-73.0, -75.0, -74.0,-73.0, -75.0].shuffled(),
+            beacon3RSSI: [-65.0, -60.0, -61.0].shuffled()
         )
 
         if let estimatedLocation = estimateLocationFromBins(beaconCounts: queryCounts) {
