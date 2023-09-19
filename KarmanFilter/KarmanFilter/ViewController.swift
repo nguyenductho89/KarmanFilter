@@ -460,7 +460,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var lineChartView: LineChartView!
     var entries: [ChartDataEntry] = []
     var entries2: [ChartDataEntry] = []
-    let positionLbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 400)))
+    let positionLbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 300, height: 40)))
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(positionLbl)
@@ -577,13 +577,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 return
             }
                 if beacon.major == 199 {
-                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
+               // entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
                 addDataPoint()
                     if isStartMeasure {
                         beacon1.append(Double(beacon.rssi))
                     }
             } else {
-                entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
+               // entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
                 addDataPoint()
                 if isStartMeasure {
                     beacon2.append(Double(beacon.rssi))
@@ -609,6 +609,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if let estimatedLocation = estimateLocationFromBins(beaconCounts: queryCounts) {
             print("Estimated Location: \(estimatedLocation)")
             positionLbl.text = estimatedLocation
+            if estimatedLocation == "Room A" {
+                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: 1.0))
+            } else {
+                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: 4.0))
+            }
         } else {
             positionLbl.text = "fail"
             print("Location estimation failed.")

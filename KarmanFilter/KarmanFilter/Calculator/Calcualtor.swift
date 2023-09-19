@@ -5,19 +5,6 @@ let roomA_b2 = [-73.0, -73.0, -74.0, -74.0, -74.0, -75.0, -75.0, -74.0, -75.0, -
 let roomB_b1 = [-83.0, -76.0, -77.0, -77.0, -86.0, -86.0, -81.0, -81.0, -77.0, -77.0, -77.0, -76.0, -83.0, -83.0, -83.0, -81.0, -78.0]
 
 let roomB_b2 = [-80.0, -81.0, -81.0, -81.0, -82.0, -82.0, -81.0, -81.0, -80.0, -80.0, -81.0, -81.0, -81.0, -80.0, -81.0, -80.0, -80.0]
-//
-//let location1 = FingerprintData(
-//    location: "Room A",
-//    beacon1Counts: binRSSIValues(rssiValues: UserDefaults.standard.value(forKey: "RoomA-b1") as! [Double]),
-//    beacon2Counts: binRSSIValues(rssiValues: UserDefaults.standard.value(forKey: "RoomA-b2") as! [Double])
-//)
-//
-//let location2 = FingerprintData(
-//    location: "Room B",
-//    beacon1Counts: binRSSIValues(rssiValues: UserDefaults.standard.value(forKey: "RoomB-b1") as! [Double]),
-//    beacon2Counts: binRSSIValues(rssiValues: UserDefaults.standard.value(forKey: "RoomB-b2") as! [Double])
-//)
-
 
 import Foundation
 
@@ -88,19 +75,10 @@ struct FingerprintData {
     let beaconCounts: [String: [String: Int]]
 }
 
-// Example fingerprint data for known locations
-let beacon1RSSIValuesLocation1 = [-75.0, -85.0, -55.0]
-let beacon2RSSIValuesLocation1 = [-65.0, -75.0, -60.0]
-let beacon3RSSIValuesLocation1 = [-70.0, -80.0, -90.0]
-
 let location1 = FingerprintData(
     location: "Room A",
     beaconCounts: binRSSIValues(beacon1RSSI: roomA_b1, beacon2RSSI: roomA_b2, beacon3RSSI: roomA_b1)
 )
-
-let beacon1RSSIValuesLocation2 = [-90.0, -85.0, -75.0]
-let beacon2RSSIValuesLocation2 = [-70.0, -80.0, -55.0]
-let beacon3RSSIValuesLocation2 = [-65.0, -70.0, -80.0]
 
 let location2 = FingerprintData(
     location: "Room B",
