@@ -24,6 +24,21 @@ final class KarmanFilterTests: XCTestCase {
         // Any test you write for XCTest can be annotated as throws and async.
         // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
         // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+        // Example usage: Estimate location based on bin counts of three beacons
+        // Example usage: Estimate location based on bin counts of three beacons
+        // Example usage: Estimate location based on bin counts of three beacons
+        let queryCounts = binRSSIValues(
+            beacon1RSSI: [-83.0, -76.0, -77.0],
+            beacon2RSSI: [-80.0, -81.0, -81.0, -81.0, -82.0],
+            beacon3RSSI: [-83.0, -76.0, -77.0]
+        )
+
+        if let estimatedLocation = estimateLocationFromBins(beaconCounts: queryCounts) {
+            print("Estimated Location: \(estimatedLocation)")
+        } else {
+            print("Location estimation failed.")
+        }
+
     }
 
     func testPerformanceExample() throws {

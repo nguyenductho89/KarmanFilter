@@ -485,8 +485,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                // Call the function to set up the line chart
                setupLineChart()
        // timer2 = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(addDataPoint), userInfo: nil, repeats: true)
-
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+            self.isStartMeasure = true
+        })
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 25, execute: {
+//            UserDefaults.standard.set(self.beacon1, forKey: "RoomB-b1")
+//            UserDefaults.standard.set(self.beacon2, forKey: "RoomB-b2")
+//        })
     }
+    var isStartMeasure = false
     var timer2: Timer?
 
     func setupLineChart() {
@@ -555,6 +562,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     var _beacons: [CLBeacon] = []
+    var beacon1: [Double] = []
+    var beacon2: [Double] = []
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         _beacons = beacons
         
@@ -567,12 +576,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 if beacon.major == 199 {
                 entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
                 addDataPoint()
+                    if isStartMeasure {
+                        beacon1.append(Double(beacon.rssi))
+                    }
             } else {
                 entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
                 addDataPoint()
+                if isStartMeasure {
+                    beacon2.append(Double(beacon.rssi))
+                }
             }
             
         }
+        print("thond: \(beacons.first?.rssi) - \(beacons[1].rssi)")
+
 //        measurements = Array(measurements.suffix(5))
 //        measure()
     }

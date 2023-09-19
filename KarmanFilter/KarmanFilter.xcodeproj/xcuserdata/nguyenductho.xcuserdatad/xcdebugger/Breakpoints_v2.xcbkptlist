@@ -64,55 +64,38 @@
                   endingLineNumber = "50"
                   offsetFromSymbolStart = "912">
                </Location>
+               <Location
+                  uuid = "E3FF5A27-0819-4383-93D9-9775CBDE14F8 - c628ddca006683bd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KarmanFilterTests.IndoorPositioningWithBluetooth.centralManager(_: __C.CBCentralManager, didDiscover: __C.CBPeripheral, advertisementData: Swift.Dictionary&lt;Swift.String, Any&gt;, rssi: __C.NSNumber) -&gt; ()"
+                  moduleName = "KarmanFilterTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nguyenductho/KarmanFilter/KarmanFilter/KarmanFilter/Bluetooth/BluetoothManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "50"
+                  endingLineNumber = "50"
+                  offsetFromSymbolStart = "868">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A676FAAF-448E-4A79-AE65-0A2F33A504F6"
+            uuid = "1B73A89E-E0C3-45F7-A8CF-CDF8807517F5"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "KarmanFilter/ViewController.swift"
+            filePath = "KarmanFilterTests/KarmanFilterTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "567"
-            endingLineNumber = "567"
-            landmarkName = "locationManager(_:didRangeBeacons:in:)"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "testExample()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A676FAAF-448E-4A79-AE65-0A2F33A504F6 - 2933e2e91be9a64f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "KarmanFilter.ViewController.locationManager(_: __C.CLLocationManager, didRangeBeacons: Swift.Array&lt;__C.CLBeacon&gt;, in: __C.CLBeaconRegion) -&gt; ()"
-                  moduleName = "KarmanFilter"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nguyenductho/KarmanFilter/KarmanFilter/KarmanFilter/ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "567"
-                  endingLineNumber = "567"
-                  offsetFromSymbolStart = "412">
-               </Location>
-               <Location
-                  uuid = "A676FAAF-448E-4A79-AE65-0A2F33A504F6 - 2933e2e91be9a64f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "KarmanFilter.ViewController.locationManager(_: __C.CLLocationManager, didRangeBeacons: Swift.Array&lt;__C.CLBeacon&gt;, in: __C.CLBeaconRegion) -&gt; ()"
-                  moduleName = "KarmanFilter"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nguyenductho/KarmanFilter/KarmanFilter/KarmanFilter/ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "567"
-                  endingLineNumber = "567"
-                  offsetFromSymbolStart = "428">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
