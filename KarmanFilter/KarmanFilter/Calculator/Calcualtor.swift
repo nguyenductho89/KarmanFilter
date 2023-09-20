@@ -18,7 +18,7 @@ struct RSSIBin {
 let signalStrengthBins: [RSSIBin] = {
     var signalStrengthBins: [RSSIBin] = []
     var minRSSI = -100.0
-    while minRSSI < -40.0 {
+    while minRSSI < -60.0 {
         let maxRSSI = minRSSI + 2.0
         let binName = "\(Int(minRSSI)) to \(Int(maxRSSI))"
         signalStrengthBins.append(RSSIBin(name: binName, min: minRSSI, max: maxRSSI))
@@ -76,14 +76,25 @@ struct FingerprintData {
 }
 
 let location1 = FingerprintData(
-    location: "Room A",
-    beaconCounts: binRSSIValues(beacon1RSSI: roomA_b1, beacon2RSSI: roomA_b2, beacon3RSSI: roomA_b1)
+    location: "Pos 00",
+    beaconCounts: binRSSIValues(beacon1RSSI: (UserDefaults.standard.value(forKey: "00-b1") as! [Double]).suffix(10),
+                                beacon2RSSI: (UserDefaults.standard.value(forKey: "00-b2") as! [Double]).suffix(10),
+                                beacon3RSSI: (UserDefaults.standard.value(forKey: "00-b3") as! [Double]).suffix(10))
 )
 
 let location2 = FingerprintData(
-    location: "Room B",
-    beaconCounts: binRSSIValues(beacon1RSSI: roomB_b1, beacon2RSSI: roomB_b2, beacon3RSSI: roomB_b1)
+    location: "Pos 01",
+    beaconCounts: binRSSIValues(beacon1RSSI: (UserDefaults.standard.value(forKey: "01-b1") as! [Double]).suffix(10),
+                                beacon2RSSI: (UserDefaults.standard.value(forKey: "01-b2") as! [Double]).suffix(10),
+                                beacon3RSSI: (UserDefaults.standard.value(forKey: "01-b3") as! [Double]).suffix(10))
 )
+
+//let location3 = FingerprintData(
+//    location: "Room C",
+//    beaconCounts: binRSSIValues(beacon1RSSI: UserDefaults.standard.value(forKey: "00-b1") as! [Double],
+//                                beacon2RSSI: UserDefaults.standard.value(forKey: "00-b2") as! [Double],
+//                                beacon3RSSI: UserDefaults.standard.value(forKey: "00-b3") as! [Double])
+//)
 
 // Store the fingerprint data in an array or database
 var fingerprintDatabase: [FingerprintData] = [location1, location2]

@@ -456,15 +456,16 @@ import DGCharts
 class ViewController: UIViewController, CLLocationManagerDelegate {
     let locationManager = CLLocationManager()
   //  let measurements = [0.39, 0.50, 0.48, 0.29, -1.0, 0.25, 0.32, 0.34, 0.48, 0.41, -1.0, 0.45, 0.46, 0.59, 0.42]
-    var measurements: [Double] = []
+    
     var lineChartView: LineChartView!
     var entries: [ChartDataEntry] = []
     var entries2: [ChartDataEntry] = []
+    var entries3: [ChartDataEntry] = []
     let positionLbl = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 300, height: 40)))
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(positionLbl)
-        positionLbl.backgroundColor = .systemGreen
+       // positionLbl.backgroundColor = .systemGreen
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startRangingBeacons(satisfying: CLBeaconIdentityConstraint(uuid: UUID(uuidString: "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6")!))
@@ -487,15 +488,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
                // Call the function to set up the line chart
                setupLineChart()
-        timer2 = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(updatePosition), userInfo: nil, repeats: true)
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
             self.isStartMeasure = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                self.timer2 = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.updatePosition), userInfo: nil, repeats: true)
+            })
         })
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 25, execute: {
-//            UserDefaults.standard.set(self.beacon1, forKey: "RoomB-b1")
-//            UserDefaults.standard.set(self.beacon2, forKey: "RoomB-b2")
-//        })
+measure()
+        //fingerprintForPosition("03")
     }
+    
+    func fingerprintForPosition(_ position: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 105, execute: {
+            UserDefaults.standard.set(self.beacon1, forKey: "\(position)-b1")
+            UserDefaults.standard.set(self.beacon2, forKey: "\(position)-b2")
+            UserDefaults.standard.set(self.beacon3, forKey: "\(position)-b3")
+        })
+    }
+    
     var isStartMeasure = false
     var timer2: Timer?
 
@@ -505,8 +516,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     @objc func addDataPoint() {
            // Create a data set from the updated data entries
-           let dataSet = LineChartDataSet(entries: entries, label: "Xiaomi")
-        let dataSet2 = LineChartDataSet(entries: entries2, label: "T20")
+           let dataSet = LineChartDataSet(entries: entries, label: "iphone 5")
+        let dataSet2 = LineChartDataSet(entries: entries2, label: "XiaomiT11")
+        let dataSet3 = LineChartDataSet(entries: entries3, label: "NokiaT20")
 
            // Customize the appearance of the data set
            dataSet.colors = [NSUIColor.blue]
@@ -514,9 +526,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         dataSet2.colors = [NSUIColor.red]
         dataSet2.circleColors = [NSUIColor.red]
+        
+        dataSet3.colors = [NSUIColor.green]
+        dataSet3.circleColors = [NSUIColor.green]
 
            // Create a data object from the updated data set
-           let data = LineChartData(dataSets: [dataSet, dataSet2])
+           let data = LineChartData(dataSets: [dataSet, dataSet2, dataSet3])
 
            // Set the updated data to the line chart view
            lineChartView.data = data
@@ -543,6 +558,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
            lineChartView.notifyDataSetChanged()
        }
     
+    var measurements: [Double] = [-78.0, -78.0, -73.0, -78.0, -78.0, -77.0, -77.0, -75.0, -76.0, -71.0, -72.0, -78.0, -78.0, -75.0, -76.0, -76.0, -76.0, -72.0, -75.0, -75.0, -76.0, -75.0, -72.0, -72.0, -75.0, -75.0, -78.0, -78.0, -78.0, -78.0, -77.0, -77.0, -72.0, -72.0, -74.0, -74.0, -74.0, -75.0, -78.0, -78.0, -78.0, -79.0, -75.0, -74.0, -78.0, -76.0, -78.0, -75.0, -74.0, -78.0, -78.0, -78.0, -78.0, -78.0, -73.0, -78.0, -77.0, -75.0, -75.0, -73.0, -73.0, -78.0, -78.0, -78.0, -77.0, -75.0, -71.0, -71.0, -76.0, -78.0, -78.0, -78.0, -78.0, -76.0, -77.0, -72.0, -72.0, -72.0, -75.0, -75.0, -78.0, -72.0, -75.0, -78.0, -78.0, -78.0, -77.0, -74.0, -75.0, -73.0, -78.0]
+    var filterResult: [Double] = []
     func measure() {
         var filter = KalmanFilter(stateEstimatePrior: 0, errorCovariancePrior: 1)
         
@@ -557,6 +574,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         guard filter.errorCovariancePrior > 0 else {
             return
         }
+        filterResult.append(filter.stateEstimatePrior)
         entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: filter.stateEstimatePrior))
         addDataPoint()
     }
@@ -567,6 +585,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var _beacons: [CLBeacon] = []
     var beacon1: [Double] = []
     var beacon2: [Double] = []
+    var beacon3: [Double] = []
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         _beacons = beacons
         
@@ -576,51 +595,81 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             guard beacon.accuracy > 0 else {
                 return
             }
-                if beacon.major == 199 {
-               // entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
-                addDataPoint()
-                    if isStartMeasure {
-                        beacon1.append(Double(beacon.rssi))
-                    }
-            } else {
-               // entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
-                addDataPoint()
+//                if beacon.major == 199 {
+//               // entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
+//                addDataPoint()
+//                    if isStartMeasure {
+//                        beacon1.append(Double(beacon.rssi))
+//                    }
+//            } else {
+//               // entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
+//                addDataPoint()
+//                if isStartMeasure {
+//                    beacon2.append(Double(beacon.rssi))
+//                }
+//            }
+                
+                
                 if isStartMeasure {
-                    beacon2.append(Double(beacon.rssi))
+                    if beacon.major == 5 {
+                        beacon1.append(Double(beacon.rssi))
+                        entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
+                    }
+                    if beacon.major == 11 {
+                        beacon2.append(Double(beacon.rssi))
+                        entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
+                    }
+                    if beacon.major == 20 {
+                        beacon3.append(Double(beacon.rssi))
+                        entries3.append(ChartDataEntry(x: Double((entries3.count + 1)), y: Double(beacon.rssi)))
+                    }
+                    addDataPoint()
                 }
-            }
             
         }
-        print("thond: \(beacons.first?.rssi) - \(beacons[1].rssi)")
-
-//        measurements = Array(measurements.suffix(5))
-//        measure()
-        
+        print("thond: \(beacons.map({$0.rssi}))")
     }
     
     @objc func updatePosition() {
         isStartMeasure = false
+        beacon1 = beacon1.suffix(5)
+        beacon2 = beacon2.suffix(5)
+        beacon3 = beacon3.suffix(5)
         let queryCounts = binRSSIValues(
-            beacon1RSSI: beacon1.shuffled(),
-            beacon2RSSI: beacon2.shuffled(),
-            beacon3RSSI: beacon1.shuffled()
+            beacon1RSSI: beacon1,
+            beacon2RSSI: beacon2,
+            beacon3RSSI: beacon3
         )
-
+        print("thond: beacon1=\(beacon1.description) beacon2=\(beacon2.description) beacon3=\(beacon3.description)")
         if let estimatedLocation = estimateLocationFromBins(beaconCounts: queryCounts) {
-            print("Estimated Location: \(estimatedLocation)")
+            print("thond Estimated Location: \(estimatedLocation)")
             positionLbl.text = estimatedLocation
-            if estimatedLocation == "Room A" {
-                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: 1.0))
-            } else {
-                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: 4.0))
-            }
+//            if estimatedLocation == "Pos 00" {
+//                positionLbl.backgroundColor = .red
+//                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: 0))
+//            } else {
+//                positionLbl.backgroundColor = .blue
+//                entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: 1))
+//            }
+
         } else {
             positionLbl.text = "fail"
             print("Location estimation failed.")
         }
-        beacon1.removeAll()
-        beacon2.removeAll()
         isStartMeasure = true
     }
 }
 
+let b1_00 = [-76.0, -76.0, -77.0, -77.0, -78.0, -77.0, -77.0, -77.0, -77.0, -77.0, -78.0, -77.0, -78.0, -75.0, -76.0, -76.0, -77.0, -76.0, -77.0, -76.0, -77.0, -77.0, -75.0, -76.0, -76.0, -77.0, -77.0, -76.0, -76.0, -75.0, -75.0, -75.0, -75.0, -75.0, -75.0, -76.0, -77.0, -77.0, -76.0, -77.0, -76.0, -76.0, -75.0, -76.0, -77.0, -76.0, -77.0, -76.0, -76.0, -76.0, -74.0, -77.0, -77.0, -75.0, -76.0, -76.0, -74.0, -78.0, -76.0, -76.0, -77.0, -77.0, -77.0, -77.0, -78.0, -77.0, -76.0, -76.0, -76.0, -77.0, -76.0, -75.0, -77.0, -77.0, -77.0, -76.0, -75.0, -76.0, -76.0, -76.0, -76.0, -77.0, -77.0, -76.0, -76.0, -75.0, -76.0, -77.0, -75.0, -75.0, -75.0]
+
+let b2_00 = [-79.0, -79.0, -79.0, -78.0, -79.0, -79.0, -78.0, -79.0, -79.0, -79.0, -79.0, -79.0, -79.0, -79.0, -77.0, -77.0, -77.0, -77.0, -76.0, -77.0, -78.0, -79.0, -77.0, -77.0, -79.0, -78.0, -78.0, -79.0, -77.0, -77.0, -78.0, -79.0, -78.0, -77.0, -77.0, -78.0, -77.0, -77.0, -77.0, -78.0, -78.0, -80.0, -76.0, -77.0, -78.0, -80.0, -77.0, -78.0, -78.0, -78.0, -78.0, -79.0, -77.0, -77.0, -77.0, -78.0, -78.0, -81.0, -79.0, -78.0, -77.0, -81.0, -80.0, -78.0, -78.0, -78.0, -77.0, -79.0, -79.0, -77.0, -76.0, -76.0, -78.0, -78.0, -80.0, -77.0, -77.0, -78.0, -78.0, -78.0, -78.0, -79.0, -76.0, -75.0, -78.0, -78.0, -77.0, -79.0, -81.0]
+
+let b3_00 = [-83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -84.0, -84.0, -83.0, -85.0, -83.0, -83.0, -84.0, -83.0, -83.0, -83.0, -83.0, -83.0, -84.0, -83.0, -83.0, -83.0, -83.0, -83.0, -84.0, -83.0, -84.0, -84.0, -83.0, -83.0, -83.0, -84.0, -83.0, -83.0, -83.0, -83.0, -83.0, -84.0, -84.0, -84.0, -83.0, -83.0, -83.0, -83.0, -83.0, -82.0, -82.0, -84.0, -83.0, -83.0, -84.0, -84.0, -84.0, -83.0, -84.0, -84.0, -83.0, -83.0, -83.0, -83.0, -84.0, -83.0, -83.0, -84.0, -83.0, -84.0, -83.0, -83.0, -82.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -83.0, -84.0, -84.0, -83.0, -83.0, -83.0]
+
+
+
+let b3_01 = [-68.0, -69.0, -68.0, -68.0, -68.0, -67.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -67.0, -68.0, -68.0, -69.0, -67.0, -67.0, -69.0, -69.0, -69.0, -68.0, -67.0, -68.0, -68.0, -69.0, -68.0, -69.0, -69.0, -68.0, -68.0, -68.0, -69.0, -69.0, -69.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -69.0, -70.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -69.0, -68.0, -69.0, -70.0, -68.0, -67.0, -68.0, -68.0, -68.0, -68.0, -68.0, -67.0, -67.0, -67.0, -68.0, -69.0, -69.0, -68.0, -68.0, -68.0, -69.0, -68.0, -68.0, -68.0, -69.0, -68.0, -70.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -68.0, -69.0]
+
+let b2_01 = [-89.0, -76.0, -77.0, -79.0, -87.0, -88.0, -89.0, -83.0, -79.0, -87.0, -87.0, -86.0, -78.0, -78.0, -79.0, -87.0, -86.0, -86.0, -85.0, -79.0, -78.0, -89.0, -88.0, -87.0, -85.0, -77.0, -76.0, -78.0, -88.0, -87.0, -86.0, -85.0, -85.0, -77.0, -78.0, -79.0, -88.0, -88.0, -87.0, -86.0, -86.0, -78.0, -78.0, -88.0, -87.0, -86.0, -86.0, -86.0, -80.0, -79.0, -79.0, -79.0, -88.0, -87.0, -84.0, -84.0, -84.0, -85.0, -78.0, -78.0, -78.0, -88.0, -87.0, -87.0, -87.0, -86.0, -86.0, -82.0, -79.0, -79.0, -87.0, -88.0, -85.0, -86.0, -77.0, -89.0, -90.0, -85.0, -86.0, -85.0, -79.0, -79.0, -78.0, -87.0, -87.0, -86.0, -85.0, -85.0, -83.0, -77.0, -78.0, -88.0, -88.0, -88.0, -86.0, -86.0]
+
+let b1_01 = [-78.0, -78.0, -79.0, -78.0, -79.0, -78.0, -79.0, -79.0, -79.0, -78.0, -80.0, -80.0, -78.0, -77.0, -77.0, -78.0, -79.0, -78.0, -79.0, -78.0, -77.0, -77.0, -78.0, -78.0, -79.0, -78.0, -77.0, -77.0, -79.0, -79.0, -79.0, -78.0, -79.0, -79.0, -79.0, -77.0, -78.0, -78.0, -78.0, -79.0, -79.0, -78.0, -79.0, -77.0, -77.0, -78.0, -78.0, -78.0, -79.0, -77.0, -78.0, -80.0, -78.0, -77.0, -79.0, -79.0, -79.0, -79.0, -78.0, -79.0, -79.0, -79.0, -79.0, -79.0, -79.0, -78.0, -78.0, -78.0, -79.0, -79.0, -78.0, -78.0, -78.0, -78.0, -79.0, -78.0, -80.0, -79.0, -77.0, -79.0, -79.0, -78.0, -78.0, -77.0, -78.0, -79.0, -78.0, -78.0, -80.0, -78.0, -77.0]
