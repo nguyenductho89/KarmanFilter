@@ -517,8 +517,8 @@ measure()
     @objc func addDataPoint() {
            // Create a data set from the updated data entries
            let dataSet = LineChartDataSet(entries: entries, label: "iphone 5")
-        let dataSet2 = LineChartDataSet(entries: entries2, label: "XiaomiT11")
-        let dataSet3 = LineChartDataSet(entries: entries3, label: "NokiaT20")
+        let dataSet2 = LineChartDataSet(entries: entries2, label: "37")
+        let dataSet3 = LineChartDataSet(entries: entries3, label: "59")
 
            // Customize the appearance of the data set
            dataSet.colors = [NSUIColor.blue]
@@ -615,11 +615,11 @@ measure()
                         beacon1.append(Double(beacon.rssi))
                         entries.append(ChartDataEntry(x: Double((entries.count + 1)), y: Double(beacon.rssi)))
                     }
-                    if beacon.major == 11 {
+                    if beacon.major == 37 {
                         beacon2.append(Double(beacon.rssi))
                         entries2.append(ChartDataEntry(x: Double((entries2.count + 1)), y: Double(beacon.rssi)))
                     }
-                    if beacon.major == 20 {
+                    if beacon.major == 59 {
                         beacon3.append(Double(beacon.rssi))
                         entries3.append(ChartDataEntry(x: Double((entries3.count + 1)), y: Double(beacon.rssi)))
                     }
